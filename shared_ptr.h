@@ -4,9 +4,24 @@ class shared_ptr{
 private:
     T* ptr;
     size_t* counter;
+
+    void swap (shared_ptr<T> sh_ptr){
+        
+    }
 public:
+    shared_ptr():ptr(nullptr),counter(new int(0));
     explicit shared_ptr(T* ptr) : ptr(ptr) , counter(new int(1));
     
+    shared_ptr(const shared_ptr<T>& sh_ptr ){
+        ptr = sh_ptr.ptr;
+        counter = sh_ptr.counter;
+        if( is_free() ) ++*counter; 
+    }
+    shared_ptr(shared_ptr<T>&& sh_ptr ):ptr(sh_ptr.ptr),counter(sh_ptr.counter){
+        sh_ptr.ptr = nullptr;
+        sh_ptr.counter = nullptr;
+    }
+
     T* get(){
         return ptr;
     }
@@ -16,6 +31,9 @@ public:
     }
     bool is_unique(){
         return use_count() == 1;
+    }
+    bool is_free(){
+        return ptr == nullptr;
     }
     void reset(T* new_ptr){
 
@@ -36,6 +54,40 @@ public:
 
     }
 
+    shared_ptr& operator=(const shared_ptr<T>& sh_ptr){
+        if(ptr==sh_ptr.ptr) return *this;
+        if(sh_ptr.is_free() && is_free()) return *this;
+        if(is_free()){
+            ptr = sh_ptr.ptr;
+            counter = sh_ptr.counter;
+            ++*counter;
+            return *this;
+        }
+        if( unique() ){
+            delete ptr;
+            delete counter;
+            ptr = sh_ptr.ptr;
+            counter = sh_ptr.counter;
+            if(!ptr) ++*counter;
+            return *this;
+        }
+        --*counter;
+        ptr = sh_ptr.ptr;
+        counter = sh_ptr.counter;
+        ++*counter;
+
+        return *this;
+    }
+    shared_ptr& operator=(shared_ptr<T>&& sh_ptr){
+        if(ptr==sh_ptr.ptr) return *this;
+        if( unique() ){
+            delete ptr;
+            delete counter;
+        }else{ --*counter;  }
+        ptr = sh_ptr.ptr;
+        counter = sh_ptr.counter;
+        return *this;
+    }
 
     ~shared_ptr(){
         if(!counter) return;
@@ -48,7 +100,7 @@ public:
 };
 
 template<typename T,typename... Args>
-shared_ptr<T> shared_ptr<T>::make_shared(Args&& ... args){
-    void* p = new char[sizeof(T)+sizeof(size_t)]; 
-    
+shared_ptr<T> make_shared(Args&& ... args){
+    //void* p = new char[aligof(T)+sizeof(size_t)]; 
+    return shared_ptr<T>(new T(args...));
 }
