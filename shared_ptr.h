@@ -86,7 +86,7 @@ public:
     }
     shared_ptr& operator=(shared_ptr<T>&& sh_ptr){
         if(ptr==sh_ptr.ptr) return *this;
-        if( unique() ){
+        if( is_unique() ){
             delete ptr;
             delete counter;
         }else{ --*counter;  }
@@ -97,7 +97,7 @@ public:
 
     ~shared_ptr(){
         if(!counter) return;
-        if( unique() ){
+        if( is_unique() ){
             delete ptr;
             delete counter;
         }
