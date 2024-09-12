@@ -1,4 +1,4 @@
-
+#include "my_swap.h"
 
 
 template<typename T>
@@ -7,8 +7,8 @@ private:
     T* ptr;
     size_t* counter;
     void swap(shared_ptr<T>& sh_ptr){
-        std::swap(ptr,sh_ptr.ptr);
-        std::swap(counter,sh_ptr.counter)
+        my_swap(ptr,sh_ptr.ptr);  //заменить на свои с std::move()
+        my_swap(counter,sh_ptr.counter)
     }
 public:
     shared_ptr():ptr(nullptr),counter(new int(0));
