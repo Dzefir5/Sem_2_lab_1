@@ -1,12 +1,14 @@
 
+
+
 template<typename T>
 class shared_ptr{
 private:
     T* ptr;
     size_t* counter;
-
-    void swap (shared_ptr<T> sh_ptr){
-        
+    void swap(shared_ptr<T>& sh_ptr){
+        std::swap(ptr,sh_ptr.ptr);
+        std::swap(counter,sh_ptr.counter)
     }
 public:
     shared_ptr():ptr(nullptr),counter(new int(0));
@@ -56,7 +58,11 @@ public:
 
     shared_ptr& operator=(const shared_ptr<T>& sh_ptr){
         if(ptr==sh_ptr.ptr) return *this;
-        if(sh_ptr.is_free() && is_free()) return *this;
+        shared_ptr<T> temp_ptr(sh_ptr);
+        swap(temp_ptr); 
+
+        /*
+        if(ptr==sh_ptr.ptr) return *this;
         if(is_free()){
             ptr = sh_ptr.ptr;
             counter = sh_ptr.counter;
@@ -75,7 +81,7 @@ public:
         ptr = sh_ptr.ptr;
         counter = sh_ptr.counter;
         ++*counter;
-
+        */
         return *this;
     }
     shared_ptr& operator=(shared_ptr<T>&& sh_ptr){
@@ -91,11 +97,11 @@ public:
 
     ~shared_ptr(){
         if(!counter) return;
-        --*counter;
-        if(!*counter){
+        if( unique() ){
             delete ptr;
             delete counter;
         }
+        --*counter;
     }
 };
 
