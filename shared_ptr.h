@@ -47,11 +47,8 @@ public:
     }
 };
 
-template<typename T>
-shared_ptr<T> shared_ptr<T>::make_shared(T* ptr){
-
-}
-template<typename T>
-shared_ptr<T> shared_ptr<T>::make_shared(const T& value){
-
+template<typename T,typename... Args>
+shared_ptr<T> shared_ptr<T>::make_shared(Args&& ... args){
+    void* p = new char[sizeof(T)+sizeof(size_t)]; 
+    
 }
