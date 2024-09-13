@@ -11,7 +11,7 @@ private:
         my_swap(counter,sh_ptr.counter)
     }
 public:
-    shared_ptr():ptr(nullptr),counter(new int(0));
+    shared_ptr():ptr(nullptr),counter(nullptr);
     explicit shared_ptr(T* ptr) : ptr(ptr) , counter(new int(1));
     
     shared_ptr(const shared_ptr<T>& sh_ptr ){
