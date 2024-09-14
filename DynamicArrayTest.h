@@ -1,14 +1,11 @@
 #pragma once
 #include "DynamicArray.h"
-#include <iostream>
 #include <cassert>
 
 void Test_DynamicArray_Constructors(){
     int a[]={1,2,3,4,5,6};
     int fillElem = 8;
-    std::cout<<"2"<<std::endl;
     DynamicArray<int> test1(6);
-    std::cout<<"2"<<std::endl;
     assert(test1.GetLength()==6);
 
     DynamicArray<int> test2(a,6);

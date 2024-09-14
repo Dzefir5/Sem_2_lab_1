@@ -1,6 +1,7 @@
 #pragma once
 
 #include "my_swap.h"
+#include <cstddef>
 
 template <typename T>
 class unique_ptr{
@@ -16,7 +17,7 @@ public:
 
     unique_ptr(const unique_ptr<T>& un_ptr):unique_ptr(){
         if(!un_ptr.ptr) return;
-        ptr = new T(un_ptr->ptr);
+        ptr = new T(*(un_ptr.ptr));
     }
     unique_ptr(unique_ptr<T>&& un_ptr ):ptr(un_ptr.ptr){
         un_ptr.ptr = nullptr;
@@ -67,18 +68,18 @@ public:
         return ptr[index];
     }
 
-    unique_ptr& operator=(const unique_ptr<T>& un_ptr){\
-        std::cout<<"Assignment operator called"<<std::endl;
+    unique_ptr& operator=(const unique_ptr<T>& un_ptr){
+        //std::cout<<"Assignment operator called"<<std::endl;
         unique_ptr<T> temp_ptr (un_ptr);
         swap(temp_ptr); 
         return *this;
     }
     unique_ptr& operator=(unique_ptr<T>&& un_ptr){
-        std::cout<<"Move Assignment operator called"<<std::endl;
+        //std::cout<<"Move Assignment operator called"<<std::endl;
         swap(un_ptr); 
         return *this;
     }
-    virtual ~uniqie_ptr(){
+    virtual ~unique_ptr(){
         delete ptr;
     }
 };

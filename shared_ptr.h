@@ -1,7 +1,7 @@
 #pragma once
 
 #include "my_swap.h"
-
+#include <cstddef>
 
 template<typename T>
 class shared_ptr{
@@ -20,7 +20,7 @@ public:
     shared_ptr(const shared_ptr<T>& sh_ptr ){
         ptr = sh_ptr.ptr;
         counter = sh_ptr.counter;
-        if( !is_free() ) ++*counter; 
+        if( !is_free() ) ++*counter;
     }
     shared_ptr(shared_ptr<T>&& sh_ptr ):ptr(sh_ptr.ptr),counter(sh_ptr.counter){
         sh_ptr.ptr = nullptr;
@@ -98,7 +98,7 @@ public:
         return !( *this==sh_ptr);
     }
 
-    virtual ~shared_ptr(){
+    ~shared_ptr(){
         if(!counter) return;
         if( is_unique() ){
             delete ptr;

@@ -1,6 +1,7 @@
 #pragma once
 #include "my_swap.h"
 #include "shared_ptr.h"
+#include <stdexcept>
 
 
 template <typename T>

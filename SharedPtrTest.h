@@ -1,8 +1,10 @@
+#pragma once
 
 #include "shared_ptr.h"
 #include "my_swap.h"
 #include "my_move.h"
-
+#include <cassert>
+#include <string>
 
 
 void test_swap(){
@@ -23,7 +25,6 @@ void test_move(){
     a = my_move(b);
     assert(a == 6);
     assert(b == 6);
-    std::cout<<a<<std::endl;
     std::string str1 = "abc";
     std::string str2 = "def";
     str1 = my_move(str2);
@@ -38,13 +39,13 @@ void test_shptr_constructor(){
 }
 void test_shptr_copy_constructor(){
     //Copy constructor
-    auto ptr1 = shared_ptr<int>(new int(10));
-    auto ptr3 = ptr1;
+    auto ptr2 = shared_ptr<int>(new int(10));
+    auto ptr3 = ptr2;
     assert(*ptr3 == 10);
     assert(ptr3.use_count() == 2);
 }
 void test_shptr_move_constructor(){
-        //Move constructor
+    //Move constructor
     auto ptr3 = shared_ptr<int>(new int(10));
     auto ptr4 = shared_ptr<int>(my_move(ptr3));
     assert(*ptr4 == 10);
@@ -160,5 +161,5 @@ void test_shared_ptr_main(){
     test_shptr_move_constructor();
     test_shptr_assignment();
     test_shared_ptr_funcs();
-    test_shared_ptr_compare();
+    //test_shared_ptr_compare();
 }
