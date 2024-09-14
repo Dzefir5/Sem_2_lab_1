@@ -6,8 +6,8 @@ private:
     T* ptr;
     size_t* counter;
 public:
-    unique_ptr():ptr(nullptr),counter(nullptr);
-    explicit unique_ptr(T* ptr):ptr(ptr), counter(new int(1));
+    unique_ptr():ptr(nullptr),counter(nullptr){};
+    explicit unique_ptr(T* ptr):ptr(ptr), counter(new int(1)){};
 
     unique_ptr(const unique_ptr<T>& un_ptr){
         if(!un_ptr.ptr){
