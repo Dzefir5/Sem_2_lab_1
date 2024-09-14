@@ -13,19 +13,16 @@ public:
         my_swap(ptr,sh_ptr.ptr);  //заменить на свои с std::move()
         my_swap(counter,sh_ptr.counter);
     }
+
     shared_ptr():ptr(nullptr),counter(nullptr){};
-    explicit shared_ptr(T* in_ptr) : ptr(in_ptr) , counter(new size_t(1)){
-        //std::cout<<"Constructor called for value ( "<<*in_ptr<<" ) current count :"<<use_count()<<std::endl;
-    };
+    explicit shared_ptr(T* in_ptr) : ptr(in_ptr) , counter(new size_t(1)){};
     
     shared_ptr(const shared_ptr<T>& sh_ptr ){
-        //std::cout<<"Copy Constructor called for value ( "<<*sh_ptr<<" ) current count :"<<sh_ptr.use_count()<<std::endl;
         ptr = sh_ptr.ptr;
         counter = sh_ptr.counter;
         if( !is_free() ) ++*counter; 
     }
     shared_ptr(shared_ptr<T>&& sh_ptr ):ptr(sh_ptr.ptr),counter(sh_ptr.counter){
-        //std::cout<<"Move Constructor called for value ( "<<*sh_ptr<<" ) current count :"<<sh_ptr.use_count()<<std::endl;
         sh_ptr.ptr = nullptr;
         sh_ptr.counter = nullptr;
     }
@@ -40,10 +37,10 @@ public:
         if(!counter) return 0;
         return *counter;
     }
-    bool is_unique(){
+    bool is_unique() const {
         return use_count() == 1;
     }
-    bool is_free(){
+    bool is_free() const {
         return ptr == nullptr;
     }
     void reset(T* new_ptr){
@@ -70,22 +67,19 @@ public:
     }
 
     T& operator[](int index){
-        //index checking
         return ptr[index];
     }
     const T& operator[](int index) const {
         return ptr[index];
     }
 
-    shared_ptr& operator=(const shared_ptr<T>& sh_ptr){\
-        //std::cout<<"Assignment operator called"<<std::endl;
+    shared_ptr& operator=(const shared_ptr<T>& sh_ptr){
         if(ptr==sh_ptr.ptr) return *this;
         shared_ptr<T> temp_ptr (sh_ptr);
         swap(temp_ptr); 
         return *this;
     }
     shared_ptr& operator=(shared_ptr<T>&& sh_ptr){
-        //std::cout<<"Move Assignment operator called"<<std::endl;
         if(ptr==sh_ptr.ptr) return *this;
         swap(sh_ptr); 
         return *this;
@@ -104,11 +98,9 @@ public:
         return !( *this==sh_ptr);
     }
 
-    ~shared_ptr(){
+    virtual ~shared_ptr(){
         if(!counter) return;
-        //std::cout<<"Destructor called for value ( "<<*ptr<<" ) current count :"<<*counter<<std::endl;
         if( is_unique() ){
-            //std::cout<<"Final destructor called for value ( "<<*ptr<<" )"<<std::endl;
             delete ptr;
             delete counter;
         }
@@ -116,8 +108,65 @@ public:
     }
 };
 
+
+
 template<typename T,typename... Args>
 shared_ptr<T> make_shared(Args&& ... args){
-    //void* p = new char[aligof(T)+sizeof(size_t)]; 
     return shared_ptr<T>(new T(args...));
+}
+
+
+
+
+template<typename T>
+bool operator==(const shared_ptr<T> &sh_ptr_a, const shared_ptr<T> &sh_ptr_b) 
+{
+    return sh_ptr_a.get() == sh_ptr_b.get();
+}
+
+template<typename T>
+bool operator!=(const shared_ptr<T> &sh_ptr_a, const shared_ptr<T> &sh_ptr_b) 
+{
+    return !(sh_ptr_a == sh_ptr_b);
+}
+template<typename T>
+bool operator==(const shared_ptr<T> &sh_ptr , std::nullptr_t )
+{
+    return sh_ptr.get()==nullptr;
+}
+template<typename T>
+bool operator!=(const shared_ptr<T> &sh_ptr , std::nullptr_t )
+{
+    return !(sh_ptr == nullptr);
+}
+template<typename T>
+bool operator==( std::nullptr_t , const shared_ptr<T> &sh_ptr )
+{
+    return sh_ptr.get()==nullptr;
+}
+template<typename T>
+bool operator!=( std::nullptr_t ,const shared_ptr<T> &sh_ptr )
+{
+    return !(sh_ptr == nullptr);
+}
+
+template<typename T>
+bool operator<(const shared_ptr<T> &sh_ptr_a, const shared_ptr<T> &sh_ptr_b) 
+{
+    return sh_ptr_a.get() < sh_ptr_b.get();
+}
+template<typename T>
+bool operator>=(const shared_ptr<T> &sh_ptr_a, const shared_ptr<T> &sh_ptr_b) 
+{
+    return  !( sh_ptr_a < sh_ptr_b );
+}
+template<typename T>
+bool operator>(const shared_ptr<T> &sh_ptr_a, const shared_ptr<T> &sh_ptr_b) 
+{
+    return sh_ptr_a.get() > sh_ptr_b.get();
+}
+template<typename T>
+bool operator<=(const shared_ptr<T> &sh_ptr_a, const shared_ptr<T> &sh_ptr_b) 
+{
+    return  !( sh_ptr_a > sh_ptr_b );
 }
