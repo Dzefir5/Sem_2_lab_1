@@ -30,5 +30,5 @@ int main(){
     std::cout<<"1"<<std::endl;
     Test_DynamicArray_CompareOperator();
     std::cout<<"1"<<std::endl;
-
+    test_shared_ptr_main();
 }

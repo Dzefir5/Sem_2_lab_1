@@ -120,7 +120,7 @@ public:
     }
     DynamicArray<T>& operator=( DynamicArray<T> array){ ///COPY AND SWAP IDIOM
        swap(array);
-       return *this;
+       return *this;-
     }
     
     //Destructor
