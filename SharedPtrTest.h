@@ -136,6 +136,10 @@ void test_shared_ptr_funcs(){
 
 }
 void test_shared_ptr_compare(){
+    auto ptr4 = shared_ptr<int>();
+    assert(ptr4==nullptr);
+    assert(nullptr==ptr4);
+    /*
     void* p = new char[sizeof(int)*10];
     int* array = static_cast<int*>(p);
     for(int i =0 ; i<10 ; i++){
@@ -144,6 +148,7 @@ void test_shared_ptr_compare(){
     auto ptr1 = shared_ptr<int>( array + 2 );
     auto ptr2 = ptr1;
     auto ptr3 = shared_ptr<int>( array + 7 );
+
     assert( ptr1 == ptr2 );
     assert( !( ptr1!=ptr2) );
     assert(ptr1<ptr3);
@@ -152,6 +157,7 @@ void test_shared_ptr_compare(){
     assert(ptr1<=ptr2);
     assert(ptr2>=ptr1);
     assert(ptr3>ptr1);
+    */
 }
 
 
@@ -161,5 +167,5 @@ void test_shared_ptr_main(){
     test_shptr_move_constructor();
     test_shptr_assignment();
     test_shared_ptr_funcs();
-    //test_shared_ptr_compare();
+    test_shared_ptr_compare();
 }

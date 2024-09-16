@@ -16,7 +16,13 @@ public:
     }
 
     shared_ptr():ptr(nullptr),counter(nullptr){};
-    explicit shared_ptr(T* in_ptr) : ptr(in_ptr) , counter(new size_t(1)){};
+    explicit shared_ptr(T* in_ptr) : ptr(in_ptr) {
+        if( in_ptr!= nullptr ){
+            counter = new size_t(1);
+        }else{
+            counter = nullptr;
+        }
+    };
     
     shared_ptr(const shared_ptr<T>& sh_ptr ){
         ptr = sh_ptr.ptr;

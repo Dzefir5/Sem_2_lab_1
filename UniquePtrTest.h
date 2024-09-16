@@ -95,6 +95,9 @@ void test_unique_ptr_compare(){
     auto ptr1 = unique_ptr<int>( array + 2 );
     auto ptr2 = unique_ptr<int>( array + 2 );
     auto ptr3 = unique_ptr<int>( array + 7 );
+    auto ptr4 = unique_ptr<int>();
+    assert(ptr4==nullptr);
+    assert(nullptr==ptr4);
     assert( ptr1 == ptr2 );
     assert( !( ptr1!=ptr2) );
     assert(ptr1<ptr3);
