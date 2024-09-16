@@ -13,7 +13,7 @@ public:
     }
 
     unique_ptr():ptr(nullptr){};
-    explicit unique_ptr(T* ptr):ptr(ptr){};
+    explicit unique_ptr(T* in_ptr):ptr(my_move(in_ptr)){};
 
     unique_ptr(const unique_ptr<T>& un_ptr):unique_ptr(){
         if(!un_ptr.ptr) return;

@@ -16,8 +16,8 @@ public:
     }
 
     shared_ptr():ptr(nullptr),counter(nullptr){};
-    explicit shared_ptr(T* in_ptr) : ptr(in_ptr) {
-        if( in_ptr!= nullptr ){
+    explicit shared_ptr(T* in_ptr) : ptr(my_move(in_ptr)) {
+        if( ptr!= nullptr ){
             counter = new size_t(1);
         }else{
             counter = nullptr;
