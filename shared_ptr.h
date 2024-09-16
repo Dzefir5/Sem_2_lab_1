@@ -2,6 +2,7 @@
 
 #include "my_swap.h"
 #include <cstddef>
+#include <type_traits>
 
 template<typename T>
 class shared_ptr{
@@ -108,12 +109,21 @@ public:
     }
 };
 
-
-
 template<typename T,typename... Args>
 shared_ptr<T> make_shared(Args&& ... args){
     return shared_ptr<T>(new T(args...));
 }
+
+/*
+template<typename T>
+shared_ptr<T[]> make_shared(int n){
+    return shared_ptr<T[]>(new T[n]);
+}
+*/
+
+
+
+
 
 
 
