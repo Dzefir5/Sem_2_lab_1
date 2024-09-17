@@ -14,20 +14,19 @@ public:
 
     unique_ptr():ptr(nullptr){};
     explicit unique_ptr(T* in_ptr):ptr(my_move(in_ptr)){};
-
+    
+    unique_ptr(const unique_ptr<T>& un_ptr) = delete;
+    /*
     unique_ptr(const unique_ptr<T>& un_ptr):unique_ptr(){
         if(!un_ptr.ptr) return;
         ptr = new T(*(un_ptr.ptr));
     }
+    */
     unique_ptr(unique_ptr<T>&& un_ptr ):ptr(un_ptr.ptr){
         un_ptr.ptr = nullptr;
     }
 
-
-    T* get(){
-        return ptr;
-    }
-    const T* get() const {
+    T* get() const {
         return ptr;
     }
     bool is_free() const {
@@ -48,32 +47,24 @@ public:
         return buf;
     }
 
-    T& operator*(){
+    T& operator*() const {
         return *get();
     }
-    T* operator->(){
+    T* operator->() const {
         return get();
     }
-    const T& operator*() const {
-        return *get();
-    }
-    const T* operator->() const {
-        return get();
-    }
-
-    T& operator[](int index){
-        return ptr[index];
-    }
-    const T& operator[](int index) const {
+    T& operator[](int index) const {
         return ptr[index];
     }
 
-    unique_ptr& operator=(const unique_ptr<T>& un_ptr){
+    unique_ptr& operator=(const unique_ptr<T>& un_ptr)=delete;
+    /*
+    {
         //std::cout<<"Assignment operator called"<<std::endl;
         unique_ptr<T> temp_ptr (un_ptr);
         swap(temp_ptr); 
         return *this;
-    }
+    }*/
     unique_ptr& operator=(unique_ptr<T>&& un_ptr){
         //std::cout<<"Move Assignment operator called"<<std::endl;
         swap(un_ptr); 
@@ -112,16 +103,6 @@ bool operator==(const unique_ptr<T> &un_ptr , std::nullptr_t )
 }
 template<typename T>
 bool operator!=(const unique_ptr<T> &un_ptr , std::nullptr_t )
-{
-    return !(un_ptr == nullptr);
-}
-template<typename T>
-bool operator==( std::nullptr_t , const unique_ptr<T> &un_ptr )
-{
-    return un_ptr.get()==nullptr;
-}
-template<typename T>
-bool operator!=( std::nullptr_t ,const unique_ptr<T> &un_ptr )
 {
     return !(un_ptr == nullptr);
 }

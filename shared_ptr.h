@@ -34,10 +34,7 @@ public:
         sh_ptr.counter = nullptr;
     }
 
-    T* get(){
-        return ptr;
-    }
-    const T* get() const {
+    T* get() const {
         return ptr;
     }
     size_t use_count() const {
@@ -60,26 +57,17 @@ public:
         swap(buf);
     }
 
-    T& operator*(){
+
+    T& operator*() const {
         return *get();
     }
-    T* operator->(){
-        return get();
-    }
-    const T& operator*() const {
-        return *get();
-    }
-    const T* operator->() const {
+    T* operator->() const {
         return get();
     }
 
-    T& operator[](int index){
+    T& operator[](int index) const {
         return ptr[index];
     }
-    const T& operator[](int index) const {
-        return ptr[index];
-    }
-
     shared_ptr& operator=(const shared_ptr<T>& sh_ptr){
         if(ptr==sh_ptr.ptr) return *this;
         shared_ptr<T> temp_ptr (sh_ptr);
@@ -91,27 +79,15 @@ public:
         swap(sh_ptr); 
         return *this;
     }
-
-    bool operator==(const shared_ptr<T>& sh_ptr) const{
-        return ptr == sh_ptr.ptr;
-    }
-    bool operator==(const T* in_ptr) const{
-        return ptr == in_ptr;
-    }
-    bool operator!=(const T* in_ptr) const {
-        return !( *this==in_ptr);
-    }
-    bool operator!=(const shared_ptr<T>& sh_ptr) const {
-        return !( *this==sh_ptr);
-    }
-
     ~shared_ptr(){
-        if(!counter) return;
-        if( is_unique() ){
+        if(!counter) 
+            return;
+        --*counter;
+        if( !*counter ){
             delete ptr;
             delete counter;
         }
-        --*counter;
+
     }
 };
 
@@ -119,20 +95,6 @@ template<typename T,typename... Args>
 shared_ptr<T> make_shared(Args&& ... args){
     return shared_ptr<T>(new T(args...));
 }
-
-/*
-template<typename T>
-shared_ptr<T[]> make_shared(int n){
-    return shared_ptr<T[]>(new T[n]);
-}
-*/
-
-
-
-
-
-
-
 
 template<typename T>
 bool operator==(const shared_ptr<T> &sh_ptr_a, const shared_ptr<T> &sh_ptr_b) 
@@ -152,16 +114,6 @@ bool operator==(const shared_ptr<T> &sh_ptr , std::nullptr_t )
 }
 template<typename T>
 bool operator!=(const shared_ptr<T> &sh_ptr , std::nullptr_t )
-{
-    return !(sh_ptr == nullptr);
-}
-template<typename T>
-bool operator==( std::nullptr_t , const shared_ptr<T> &sh_ptr )
-{
-    return sh_ptr.get()==nullptr;
-}
-template<typename T>
-bool operator!=( std::nullptr_t ,const shared_ptr<T> &sh_ptr )
 {
     return !(sh_ptr == nullptr);
 }
