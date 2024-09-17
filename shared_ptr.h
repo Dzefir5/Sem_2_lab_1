@@ -2,7 +2,6 @@
 
 #include "my_swap.h"
 #include <cstddef>
-#include <type_traits>
 
 template<typename T>
 class shared_ptr{
@@ -91,20 +90,6 @@ public:
         swap(sh_ptr); 
         return *this;
     }
-
-    bool operator==(const shared_ptr<T>& sh_ptr) const{
-        return ptr == sh_ptr.ptr;
-    }
-    bool operator==(const T* in_ptr) const{
-        return ptr == in_ptr;
-    }
-    bool operator!=(const T* in_ptr) const {
-        return !( *this==in_ptr);
-    }
-    bool operator!=(const shared_ptr<T>& sh_ptr) const {
-        return !( *this==sh_ptr);
-    }
-
     ~shared_ptr(){
         if(!counter) return;
         if( is_unique() ){
