@@ -34,6 +34,7 @@ void test_unptr_assignment(){
     auto ptr2 = unique_ptr<int>(new int(20));
     assert(*ptr2 == 20);
     ptr2 = ptr1;
+    assert(ptr1.get()!=ptr2.get());
     assert(*ptr1 == *ptr2 && *ptr1 == 10);
 
     //Move Assignmenet operator

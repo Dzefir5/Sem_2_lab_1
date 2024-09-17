@@ -42,6 +42,7 @@ void test_shptr_copy_constructor(){
     auto ptr2 = shared_ptr<int>(new int(10));
     auto ptr3 = ptr2;
     assert(*ptr3 == 10);
+    assert(ptr3 == ptr2);
     assert(ptr3.use_count() == 2);
 }
 void test_shptr_move_constructor(){
@@ -65,7 +66,7 @@ void test_shptr_destructor(){
             assert(*ptr6 == 10);
             assert(ptr6.use_count() == 2 );
         }
-        assert(ptr5.use_count() == 1 );\
+        assert(ptr5.use_count() == 1 );
     }
     assert(test_ptr==nullptr);
 }
