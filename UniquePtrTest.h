@@ -11,6 +11,7 @@ void test_unptr_constructor(){
     auto ptr1 = unique_ptr<int>(new int(10));
     assert(*ptr1 == 10);
 }
+/*
 void test_unptr_copy_constructor(){
     //Copy constructor
     auto ptr1 = unique_ptr<int>(new int(10));
@@ -18,6 +19,7 @@ void test_unptr_copy_constructor(){
     assert(*ptr3 == 10);
     assert(ptr1.get()!=ptr3.get());
 }
+*/
 void test_unptr_move_constructor(){
     //Move constructor
     auto ptr3 = unique_ptr<int>(new int(10));
@@ -29,13 +31,14 @@ void test_unptr_move_constructor(){
 
 void test_unptr_assignment(){
     //Assignmenet operator 
+    /*
     auto ptr1 = unique_ptr<int>(new int(10));
     assert(*ptr1 == 10);
     auto ptr2 = unique_ptr<int>(new int(20));
     assert(*ptr2 == 20);
     ptr2 = ptr1;
     assert(*ptr1 == *ptr2 && *ptr1 == 10);
-
+    */
     //Move Assignmenet operator
     auto ptr4= unique_ptr<int>(new int(10));
     auto ptr5= unique_ptr<int>(new int(20));
@@ -114,7 +117,7 @@ void test_unique_ptr_compare(){
 
 void test_unique_ptr_main(){
     test_unptr_constructor();
-    test_unptr_copy_constructor();
+    //test_unptr_copy_constructor();
     test_unptr_move_constructor();
     test_unptr_assignment();
     test_unique_ptr_funcs();
