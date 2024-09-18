@@ -113,7 +113,17 @@ bool operator==(const shared_ptr<T> &sh_ptr , std::nullptr_t )
     return sh_ptr.get()==nullptr;
 }
 template<typename T>
+bool operator==( std::nullptr_t,const shared_ptr<T> &sh_ptr )
+{
+    return sh_ptr.get()==nullptr;
+}
+template<typename T>
 bool operator!=(const shared_ptr<T> &sh_ptr , std::nullptr_t )
+{
+    return !(sh_ptr == nullptr);
+}
+template<typename T>
+bool operator!=( std::nullptr_t , const shared_ptr<T> &sh_ptr)
 {
     return !(sh_ptr == nullptr);
 }

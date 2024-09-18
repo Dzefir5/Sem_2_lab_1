@@ -102,7 +102,17 @@ bool operator==(const unique_ptr<T> &un_ptr , std::nullptr_t )
     return un_ptr.get()==nullptr;
 }
 template<typename T>
+bool operator==( std::nullptr_t , const unique_ptr<T> &un_ptr  )
+{
+    return un_ptr.get()==nullptr;
+}
+template<typename T>
 bool operator!=(const unique_ptr<T> &un_ptr , std::nullptr_t )
+{
+    return !(un_ptr == nullptr);
+}
+template<typename T>
+bool operator!=( std::nullptr_t ,  const unique_ptr<T> &un_ptr)
 {
     return !(un_ptr == nullptr);
 }
