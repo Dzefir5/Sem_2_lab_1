@@ -1,6 +1,7 @@
 #pragma once
 
 #include "my_swap.h"
+#include "my_move.h"
 #include <cstddef>
 
 
@@ -8,6 +9,11 @@ template<typename T>
 class shared_ptr{
 private:
     T* ptr;
+    ControlBlock* block;
+    struct ControlBlock{
+        size_t ref_count;
+        size_t weak_count;
+    }
     size_t* counter;
 public:
     void swap(shared_ptr<T>& sh_ptr){
