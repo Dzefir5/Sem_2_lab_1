@@ -5,6 +5,8 @@
 #include "SharedPtrTest.h"
 #include "UniquePtrTest.h"
 
+#include <iostream>
+
 int main(){
     
     test_move();
@@ -26,13 +28,10 @@ int main(){
        auto ptr5 = make_shared<int>(50); 
     }
     std::cout<<"+_____________________"<<std::endl;
-    
-    Test_DynamicArray_Constructors();
-    std::cout<<"1"<<std::endl;
-    Test_DynamicArray_Set();
-    std::cout<<"1"<<std::endl;
-    Test_DynamicArray_CompareOperator();
     std::cout<<"1"<<std::endl;*/
+    Test_DynamicArray_Constructors();
+    Test_DynamicArray_Set();
+    Test_DynamicArray_CompareOperator();
     test_shared_ptr_main();
     test_unique_ptr_main();
 }

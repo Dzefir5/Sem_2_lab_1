@@ -1,6 +1,7 @@
 #pragma once
 
 #include "shared_ptr.h"
+#include "weak_ptr.h"
 #include "my_swap.h"
 #include "my_move.h"
 #include <cassert>
@@ -136,6 +137,26 @@ void test_shared_ptr_funcs(){
     }
 
 }
+
+void test_weak(){
+    auto wptr =  weak_ptr<int>();
+    assert(wptr.is_expired());
+    {
+        auto ptr1 = shared_ptr<int>(new int(10));
+        assert(*ptr1 == 10);
+        assert(ptr1.use_count() == 1); 
+        assert(ptr1.weak_count() == 0); 
+        auto wptr1 = weak_ptr<int>(ptr1);
+        assert(ptr1.weak_count() == 1); 
+        assert(wptr1.use_count() == 1); 
+        assert(! wptr1.is_expired() );
+        wptr = weak_ptr<int>(ptr1);
+        assert(ptr1.weak_count() == 2); 
+        assert(wptr.use_count() == 2); 
+
+    }
+    assert(wptr.is_expired());
+}
 void test_shared_ptr_compare(){
     auto ptr4 = shared_ptr<int>();
     assert(ptr4==nullptr);
@@ -169,4 +190,5 @@ void test_shared_ptr_main(){
     test_shptr_assignment();
     test_shared_ptr_funcs();
     test_shared_ptr_compare();
+    test_weak();
 }

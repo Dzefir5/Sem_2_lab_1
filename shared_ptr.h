@@ -4,27 +4,33 @@
 #include "my_move.h"
 #include <cstddef>
 
+template<typename T>
+class weak_ptr;
 
 template<typename T>
 class shared_ptr{
 private:
-    T* ptr;
-    ControlBlock* block;
     struct ControlBlock{
         size_t ref_count;
         size_t weak_count;
-    }
-    size_t* counter;
+        ControlBlock(size_t ref =0 , size_t weak = 0):ref_count(ref),weak_count(weak){}
+    };
+    T* ptr; 
+    ControlBlock* counter;
+    friend class weak_ptr<T>;
 public:
     void swap(shared_ptr<T>& sh_ptr){
-        my_swap(ptr,sh_ptr.ptr);  //заменить на свои с std::move()
+        my_swap(ptr,sh_ptr.ptr);  
         my_swap(counter,sh_ptr.counter);
     }
 
     shared_ptr():ptr(nullptr),counter(nullptr){};
+    explicit shared_ptr( const weak_ptr<T>& w_ptr ):ptr(w_ptr.ptr),counter(w_ptr.counter){
+        counter->ref_count++;
+    }
     explicit shared_ptr(T* in_ptr) : ptr(my_move(in_ptr)) {
         if( ptr!= nullptr ){
-            counter = new size_t(1);
+            counter = new ControlBlock(1,0);
         }else{
             counter = nullptr;
         }
@@ -33,7 +39,7 @@ public:
     shared_ptr(const shared_ptr<T>& sh_ptr ){
         ptr = sh_ptr.ptr;
         counter = sh_ptr.counter;
-        if( !is_free() ) ++*counter;
+        if( !is_free() ) ++counter->ref_count;
     }
     shared_ptr(shared_ptr<T>&& sh_ptr ):ptr(sh_ptr.ptr),counter(sh_ptr.counter){
         sh_ptr.ptr = nullptr;
@@ -45,7 +51,11 @@ public:
     }
     size_t use_count() const {
         if(!counter) return 0;
-        return *counter;
+        return counter->ref_count;
+    }
+    size_t weak_count() const {
+        if(!counter) return 0;
+        return counter->weak_count;
     }
     bool is_unique() const {
         return use_count() == 1;
@@ -88,11 +98,12 @@ public:
     ~shared_ptr(){
         if(!counter) 
             return;
-        --*counter;
-        if( !*counter ){
+        --counter->ref_count;
+        if( !counter->ref_count ){
             delete ptr;
-            delete counter;
+            if( !counter->weak_count ) delete counter ;
         }
+        
 
     }
 };
@@ -154,3 +165,4 @@ bool operator<=(const shared_ptr<T> &sh_ptr_a, const shared_ptr<T> &sh_ptr_b)
 {
     return  !( sh_ptr_a > sh_ptr_b );
 }
+
