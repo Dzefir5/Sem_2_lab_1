@@ -26,10 +26,10 @@ public:
 
     shared_ptr():ptr(nullptr),counter(nullptr){};
     explicit shared_ptr( const weak_ptr<T>& w_ptr ):ptr(w_ptr.ptr),counter(w_ptr.counter){
-        counter->ref_count++;
+        if(counter) counter->ref_count++;
     }
     explicit shared_ptr(T* in_ptr) : ptr(my_move(in_ptr)) {
-        if( ptr!= nullptr ){
+        if( !ptr ){
             counter = new ControlBlock(1,0);
         }else{
             counter = nullptr;
