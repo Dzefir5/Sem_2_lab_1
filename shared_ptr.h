@@ -4,9 +4,12 @@
 #include "my_move.h"
 #include <cstddef>
 
+
+
 template<typename T>
 class weak_ptr;
 
+//реализовать Deleter или специализаицию для T[]
 template<typename T>
 class shared_ptr{
 private:
@@ -102,10 +105,10 @@ public:
         return *this;
     }
     ~shared_ptr(){
-        if(!counter) 
-            return;
+        if(!counter) return;
         --counter->ref_count;
         if( !counter->ref_count ){
+            if()
             delete ptr;
             if( !counter->weak_count ) delete counter ;
         }
