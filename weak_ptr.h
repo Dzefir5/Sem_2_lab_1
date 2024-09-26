@@ -15,6 +15,7 @@ public:
         my_swap(counter,w_ptr.counter);
     }
     weak_ptr():ptr(nullptr),counter(nullptr){}
+    weak_ptr(std::nullptr_t):weak_ptr(){}
     weak_ptr(const shared_ptr<T>& sh_ptr):ptr(sh_ptr.ptr),counter(sh_ptr.counter){
         if(counter && ptr) counter->weak_count++;
     }
@@ -46,6 +47,12 @@ public:
     }
     weak_ptr& operator=(weak_ptr<T>&& w_ptr){
         if(ptr==w_ptr.ptr) return *this;
+        swap(w_ptr); 
+        return *this;
+    }
+    weak_ptr& operator=(std::nullptr_t){
+        if(!ptr) return *this;
+        weak_ptr<T> temp_ptr ();
         swap(w_ptr); 
         return *this;
     }

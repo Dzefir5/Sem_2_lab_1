@@ -84,6 +84,12 @@ public:
     T& operator[](int index) const {
         return ptr[index];
     }
+    shared_ptr& operator=(std::nullptr_t){
+        if(!ptr) return *this;
+        shared_ptr<T> temp_ptr ();
+        swap(temp_ptr); 
+        return *this;
+    }
     shared_ptr& operator=(const shared_ptr<T>& sh_ptr){
         if(ptr==sh_ptr.ptr) return *this;
         shared_ptr<T> temp_ptr (sh_ptr);
