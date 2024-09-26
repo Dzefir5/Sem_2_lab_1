@@ -4,13 +4,25 @@
 #include "my_move.h"
 #include <cstddef>
 
+template<typename T>
+struct My_Default_Deleter{
+    void operator()(T* ptr){
+        delete ptr;
+    }
+};
 
+template<typename T>
+struct My_Default_ArrayDeleter{
+    void operator()(T* ptr){
+        delete[] ptr;
+    }
+};
 
 template<typename T>
 class weak_ptr;
 
 //реализовать Deleter или специализаицию для T[]
-template<typename T>
+template<typename T/*,class Deleter =  My_Default_Deleter<T>*/ >
 class shared_ptr{
 private:
     struct ControlBlock{
@@ -19,6 +31,7 @@ private:
         ControlBlock(size_t ref =0 , size_t weak = 0):ref_count(ref),weak_count(weak){}
     };
     T* ptr; 
+    //Deleter my_delete;
     ControlBlock* counter;
     friend class weak_ptr<T>;
 public:
