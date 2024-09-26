@@ -7,6 +7,7 @@
 #include <cassert>
 #include <string>
 
+//#include <iostream>
 
 void test_swap(){
     int a = 5;
@@ -127,10 +128,11 @@ void test_shared_ptr_funcs(){
     }
     // [] operator
     {
-        auto ptr1 = shared_ptr<int>(new int[10]);
+        int* test_ptr = new int[10];
         for(int i =0 ; i<10 ; i++){
-            ptr1[i]=i;
+            test_ptr[i]=i;
         }
+        auto ptr1 = shared_ptr<int>(test_ptr);
         for(int i =0 ; i<10 ; i++){
             assert(ptr1[i]==i);
         }

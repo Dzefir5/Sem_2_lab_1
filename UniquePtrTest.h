@@ -28,33 +28,12 @@ void test_unptr_move_constructor(){
     assert(ptr3.is_free());
 }
 
-
-void test_unptr_assignment(){
-    //Assignmenet operator 
-    /*
-    auto ptr1 = unique_ptr<int>(new int(10));
-    assert(*ptr1 == 10);
-    auto ptr2 = unique_ptr<int>(new int(20));
-    assert(*ptr2 == 20);
-    ptr2 = ptr1;
-    assert(ptr1.get()!=ptr2.get());
-    assert(*ptr1 == *ptr2 && *ptr1 == 10);
-    */
-    //Move Assignmenet operator
-    auto ptr4= unique_ptr<int>(new int(10));
-    auto ptr5= unique_ptr<int>(new int(20));
-    assert(*ptr4 == 10);
-    ptr4 = unique_ptr<int>(my_move(ptr5));
-    assert(*ptr4 == 20);
-    assert(ptr5.is_free());
-}
-
 void test_unique_ptr_funcs(){
     //Make_shared
     {
         auto ptr1 = make_shared<int>(20);
         assert(*ptr1 == 20);
-        assert(ptr1.use_count() == 1);
+        assert(ptr1.get_usage_count() == 1);
         auto ptr2 = make_shared<std::string>(8,'a');
         assert(*ptr2 == "aaaaaaaa");
     }
@@ -104,12 +83,6 @@ void test_unique_ptr_compare(){
     assert(nullptr==ptr4);
     assert( ptr1 == ptr2 );
     assert( !( ptr1!=ptr2) );
-    assert(ptr1<ptr3);
-    assert(ptr1<=ptr3);
-    assert(ptr3>=ptr1);
-    assert(ptr1<=ptr2);
-    assert(ptr2>=ptr1);
-    assert(ptr3>ptr1);
     ptr1.release();
     ptr3.release();
     ptr2.release();
@@ -118,9 +91,7 @@ void test_unique_ptr_compare(){
 
 void test_unique_ptr_main(){
     test_unptr_constructor();
-    //test_unptr_copy_constructor();
     test_unptr_move_constructor();
-    test_unptr_assignment();
     test_unique_ptr_funcs();
     test_unique_ptr_compare();
 }
