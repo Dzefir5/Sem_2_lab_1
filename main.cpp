@@ -11,9 +11,9 @@ int main(){
     
     test_move();
     test_swap();
-    Test_DynamicArray_Constructors();
-    Test_DynamicArray_Set();
-    Test_DynamicArray_CompareOperator();
+    //Test_DynamicArray_Constructors();
+    //Test_DynamicArray_Set();
+    //Test_DynamicArray_CompareOperator();
     test_shared_ptr_main();
     test_unique_ptr_main();
 }

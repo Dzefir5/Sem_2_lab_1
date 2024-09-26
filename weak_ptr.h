@@ -31,7 +31,9 @@ public:
         if(!counter) return true;
         return counter->ref_count == 0;
     }
-    int use_count(){
+    //переименовать get_usage_count
+    
+    size_t get_usage_count(){
         if(!counter) return 0 ;
         return counter->weak_count;
     }
