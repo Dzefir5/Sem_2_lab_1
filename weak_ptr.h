@@ -16,10 +16,10 @@ public:
     }
     weak_ptr():ptr(nullptr),counter(nullptr){}
     weak_ptr(const shared_ptr<T>& sh_ptr):ptr(sh_ptr.ptr),counter(sh_ptr.counter){
-        if(counter) counter->weak_count++;
+        if(counter && ptr) counter->weak_count++;
     }
     weak_ptr(const weak_ptr<T>& w_ptr):ptr(w_ptr.ptr),counter(w_ptr.counter){
-        if(counter) counter->weak_count++;
+        if(counter && ptr) counter->weak_count++;
     }
     weak_ptr(weak_ptr<T>&& w_ptr):ptr(w_ptr.ptr),counter(w_ptr.counter){
         w_ptr.ptr = nullptr;
