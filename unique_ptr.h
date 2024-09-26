@@ -2,11 +2,14 @@
 
 #include "my_swap.h"
 #include <cstddef>
+#include "My_TypeTraits.h"
 
-template <typename T,class Deleter =  My_Default_Deleter<T>>
+
+template <typename T,class Deleter =  My_Universal_Deleter<T>>
 class unique_ptr{
+using U = remove_extent_t<T>;
 private:
-    T* ptr;
+    U* ptr;
     Deleter my_delete = Deleter() ;
 public:
     //inline
@@ -15,7 +18,7 @@ public:
     }
     unique_ptr():ptr(nullptr){};
     explicit unique_ptr(std::nullptr_t):unique_ptr(){};
-    explicit unique_ptr(T* in_ptr):ptr(my_move(in_ptr)){};
+    explicit unique_ptr(U* in_ptr):ptr(my_move(in_ptr)){};
     
     unique_ptr(const unique_ptr<T,Deleter>& un_ptr) = delete;
 
@@ -25,7 +28,7 @@ public:
     bool is_free() const {
         return ptr == nullptr;
     }
-    void reset(T* new_ptr){ //убрать
+    void reset(U* new_ptr){ //убрать
         if(ptr==new_ptr) return ;
         auto buf = unique_ptr<T,Deleter>(new_ptr);
         swap(buf);
@@ -34,8 +37,8 @@ public:
         auto buf =  unique_ptr<T,Deleter>();
         swap(buf);
     }
-    T* release(){
-        T* buf = ptr;
+    U* release(){
+        U* buf = ptr;
         ptr = nullptr;
         return buf;
     }
@@ -69,41 +72,55 @@ public:
 
 
 
-template<typename T,class Deleter =  My_Default_Deleter<T>,typename... Args>
+template<typename T,class Deleter =  My_Universal_Deleter<T>,typename... Args>
 unique_ptr<T,Deleter> make_unique(Args&& ... args){
     return unique_ptr<T,Deleter>(new T(args...));
 }
 
+template<typename T,class Deleter =  My_Universal_Deleter<T>,typename... Args>
+unique_ptr<T[],Deleter>make_unique(size_t size , Args&& ... args){
+    T* ptr  = new T[size];
+    for(int i =0 ; i<size;i++){
+        ptr[i]=T(args...)
+    }
+    return unique_ptr<T,Deleter>(ptr);
+}
+
+template<typename T,class Deleter =  My_Universal_Deleter<T>>
+unique_ptr<T[],Deleter> make_unique(size_t size){
+    T* ptr = new T[size];
+    return unique_ptr<T,Deleter>(ptr);
+}
 
 
 
-template<typename T,class Deleter =  My_Default_Deleter<T>>
+template<typename T,class Deleter =  My_Universal_Deleter<T>>
 bool operator==(const unique_ptr<T,Deleter> &un_ptr_a, const unique_ptr<T,Deleter> &un_ptr_b) 
 {
     return un_ptr_a.get() == un_ptr_b.get();
 }
 
-template<typename T,class Deleter =  My_Default_Deleter<T>>
+template<typename T,class Deleter =  My_Universal_Deleter<T>>
 bool operator!=(const unique_ptr<T,Deleter> &un_ptr_a, const unique_ptr<T,Deleter> &un_ptr_b) 
 {
     return !(un_ptr_a == un_ptr_b);
 }
-template<typename T,class Deleter =  My_Default_Deleter<T>>
+template<typename T,class Deleter =  My_Universal_Deleter<T>>
 bool operator==(const unique_ptr<T,Deleter> &un_ptr , std::nullptr_t )
 {
     return un_ptr.get()==nullptr;
 }
-template<typename T,class Deleter =  My_Default_Deleter<T>>
+template<typename T,class Deleter =  My_Universal_Deleter<T>>
 bool operator==( std::nullptr_t , const unique_ptr<T,Deleter> &un_ptr  )
 {
     return un_ptr.get()==nullptr;
 }
-template<typename T,class Deleter =  My_Default_Deleter<T>>
+template<typename T,class Deleter =  My_Universal_Deleter<T>>
 bool operator!=(const unique_ptr<T,Deleter> &un_ptr , std::nullptr_t )
 {
     return !(un_ptr == nullptr);
 }
-template<typename T,class Deleter =  My_Default_Deleter<T>>
+template<typename T,class Deleter =  My_Universal_Deleter<T>>
 bool operator!=( std::nullptr_t ,  const unique_ptr<T,Deleter> &un_ptr)
 {
     return !(un_ptr == nullptr);

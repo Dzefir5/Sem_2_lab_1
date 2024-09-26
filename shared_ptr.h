@@ -10,7 +10,7 @@ template<typename T,class Deleter>
 class weak_ptr;
 
 //реализовать Deleter или специализаицию для T[]
-template<typename T,class Deleter =  My_Default_Deleter<T> >
+template<typename T,class Deleter =  My_Universal_Deleter<T> >
 class shared_ptr{
 private:
 using U = remove_extent_t<T>;
@@ -118,11 +118,11 @@ public:
     }
 };
 
-template<typename T,class Deleter =  My_Default_Deleter<T>,typename... Args>
+template<typename T,class Deleter =  My_Universal_Deleter<T>,typename... Args>
 shared_ptr<T,Deleter> make_shared(Args&& ... args){
     return shared_ptr<T,Deleter>(new T(args...));
 }
-template<typename T,class Deleter =  My_Default_Deleter<T>,typename... Args>
+template<typename T,class Deleter =  My_Universal_Deleter<T>,typename... Args>
 shared_ptr<T[],Deleter> make_shared(size_t size , Args&& ... args){
     T* ptr  = new T[size];
     for(int i =0 ; i<size;i++){
@@ -130,39 +130,40 @@ shared_ptr<T[],Deleter> make_shared(size_t size , Args&& ... args){
     }
     return shared_ptr<T,Deleter>(ptr);
 }
-template<typename T,class Deleter =  My_Default_Deleter<T>>
+
+template<typename T,class Deleter =  My_Universal_Deleter<T>>
 shared_ptr<T[],Deleter> make_shared(size_t size){
     T* ptr  = new T[size];
     return shared_ptr<T,Deleter>(ptr);
 }
 
-template<typename T,class Deleter =  My_Default_Deleter<T>>
+template<typename T,class Deleter =  My_Universal_Deleter<T>>
 bool operator==(const shared_ptr<T,Deleter> &sh_ptr_a, const shared_ptr<T,Deleter> &sh_ptr_b) 
 {
     return sh_ptr_a.get() == sh_ptr_b.get();
 }
 
-template<typename T,class Deleter =  My_Default_Deleter<T>>
+template<typename T,class Deleter =  My_Universal_Deleter<T>>
 bool operator!=(const shared_ptr<T,Deleter> &sh_ptr_a, const shared_ptr<T,Deleter> &sh_ptr_b) 
 {
     return !(sh_ptr_a == sh_ptr_b);
 }
-template<typename T,class Deleter =  My_Default_Deleter<T>>
+template<typename T,class Deleter =  My_Universal_Deleter<T>>
 bool operator==(const shared_ptr<T,Deleter> &sh_ptr , std::nullptr_t )
 {
     return sh_ptr.get()==nullptr;
 }
-template<typename T,class Deleter =  My_Default_Deleter<T>>
+template<typename T,class Deleter =  My_Universal_Deleter<T>>
 bool operator==( std::nullptr_t,const shared_ptr<T,Deleter> &sh_ptr )
 {
     return sh_ptr.get()==nullptr;
 }
-template<typename T,class Deleter =  My_Default_Deleter<T>>
+template<typename T,class Deleter =  My_Universal_Deleter<T>>
 bool operator!=(const shared_ptr<T,Deleter> &sh_ptr , std::nullptr_t )
 {
     return !(sh_ptr == nullptr);
 }
-template<typename T,class Deleter =  My_Default_Deleter<T>>
+template<typename T,class Deleter =  My_Universal_Deleter<T>>
 bool operator!=( std::nullptr_t , const shared_ptr<T,Deleter> &sh_ptr)
 {
     return !(sh_ptr == nullptr);

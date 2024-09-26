@@ -4,7 +4,7 @@
 #include "my_swap.h"
 #include "my_move.h"
 #include "My_TypeTraits.h"
-template <typename T,class Deleter =  My_Default_Deleter<T> >
+template <typename T,class Deleter =  My_Universal_Deleter<T> >
 class weak_ptr{
 using U = remove_extent_t<T>;
 private:
