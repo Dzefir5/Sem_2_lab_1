@@ -59,7 +59,7 @@ void test_unique_ptr_funcs(){
     }
     // [] operator
     {
-        auto ptr1 = unique_ptr<int>(new int[10]);
+        auto ptr1 = unique_ptr<int[]>(new int[10]);
         for(int i =0 ; i<10 ; i++){
             ptr1[i]=i;
         }

@@ -42,21 +42,22 @@ public:
         ptr = nullptr;
         return buf;
     }
-    T* get() const {
+    U* get() const {
         return ptr;
     }
-    T& operator*() const {
+    U& operator*() const {
         return *ptr;
     }
-    T* operator->() const {
+    U* operator->() const {
         return ptr;
     }
-    T& operator[](int index) const {
+    template<typename K = T, typename = enable_if_t<typename is_array<K>::value > >
+    U& operator[](int index) const {
         return ptr[index];
     }
     unique_ptr& operator=(const unique_ptr<T,Deleter>& un_ptr)=delete;
     unique_ptr& operator=(std::nullptr_t){
-        unique_ptr<T,Deleter> temp_ptr();
+        unique_ptr<T,Deleter> temp_ptr;
         swap(temp_ptr); 
         return *this;
     }
@@ -81,7 +82,7 @@ template<typename T,class Deleter =  My_Universal_Deleter<T>,typename... Args>
 unique_ptr<T[],Deleter>make_unique(size_t size , Args&& ... args){
     T* ptr  = new T[size];
     for(int i =0 ; i<size;i++){
-        ptr[i]=T(args...)
+        ptr[i]=T(args...);
     }
     return unique_ptr<T,Deleter>(ptr);
 }

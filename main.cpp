@@ -4,7 +4,11 @@
 //#include "DynamicArrayTest.h"
 #include "SharedPtrTest.h"
 #include "UniquePtrTest.h"
-
+#include <memory>
+#include <type_traits>
+//std::enable_if_t<std::is_array<int>> func(){};
+std::shared_ptr<int> fd;
+std::unique_ptr<int> gh;
 #include <iostream>
 //clang++ main.cpp  -Wall -Wextra -o main.exe
 int main(){
@@ -19,6 +23,8 @@ int main(){
             std::cout<<ptr1[i]<<std::endl;
         }
     }
+    auto ptr2 = make_shared<int>(10);
+    
     std::cout<<ptr[0]<<std::endl;
     test_move();
     test_swap();

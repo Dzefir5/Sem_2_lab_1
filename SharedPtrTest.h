@@ -132,7 +132,7 @@ void test_shared_ptr_funcs(){
         for(int i =0 ; i<10 ; i++){
             test_ptr[i]=i;
         }
-        auto ptr1 = shared_ptr<int>(test_ptr);
+        auto ptr1 = shared_ptr<int[]>(test_ptr);
         for(int i =0 ; i<10 ; i++){
             assert(ptr1[i]==i);
         }

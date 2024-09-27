@@ -45,7 +45,7 @@ public:
 
     weak_ptr& operator=(const weak_ptr<T,Deleter>& w_ptr){
         if(ptr==w_ptr.ptr) return *this;
-        weak_ptr<T,Deleter> temp_ptr (w_ptr);
+        weak_ptr<T,Deleter> temp_ptr(w_ptr);
         swap(temp_ptr); 
         return *this;
     }
@@ -56,7 +56,7 @@ public:
     }
     weak_ptr& operator=(std::nullptr_t){
         if(!ptr) return *this;
-        weak_ptr<T,Deleter> temp_ptr ();
+        weak_ptr<T,Deleter> temp_ptr;
         swap(temp_ptr); 
         return *this;
     }

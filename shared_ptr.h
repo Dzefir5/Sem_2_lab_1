@@ -5,9 +5,11 @@
 #include <cstddef>
 #include "Deleters.h"
 #include "My_TypeTraits.h"
-
+#include <type_traits>
+#include <iostream>
 template<typename T,class Deleter>
 class weak_ptr;
+
 
 //реализовать Deleter или специализаицию для T[]
 template<typename T,class Deleter =  My_Universal_Deleter<T> >
@@ -74,22 +76,24 @@ public:
         auto buf = shared_ptr<T,Deleter>();
         swap(buf);
     }
-    U* get() const {
-        return ptr;
-    }
     U& operator*() const {
         return *get();
     }
     U* operator->() const {
         return get();
     }
-    const U& operator[](int index) const {
+    U* get() const {
+        return ptr;
+    }
+    template<typename K = T, typename = enable_if_t<typename is_array<K>::value > >
+    U& operator[](int index) const {
         return ptr[index];
     }
+
     shared_ptr& operator=(std::nullptr_t){
         if(!ptr) 
             return *this;
-        shared_ptr<T,Deleter> temp_ptr();
+        shared_ptr<T,Deleter> temp_ptr;
         swap(temp_ptr); 
         return *this;
     }
@@ -126,7 +130,7 @@ template<typename T,class Deleter =  My_Universal_Deleter<T>,typename... Args>
 shared_ptr<T[],Deleter> make_shared(size_t size , Args&& ... args){
     T* ptr  = new T[size];
     for(int i =0 ; i<size;i++){
-        ptr[i]=T(args...)
+        ptr[i]=T(args...);
     }
     return shared_ptr<T,Deleter>(ptr);
 }
