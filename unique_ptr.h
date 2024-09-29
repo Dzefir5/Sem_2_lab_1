@@ -62,7 +62,7 @@ public:
         return *this;
     }
     unique_ptr& operator=(unique_ptr<T,Deleter>&& un_ptr){
-        unique_ptr<T,Deleter> temp_ptr(un_ptr);
+        unique_ptr<T,Deleter> temp_ptr(my_move(un_ptr));
         swap(temp_ptr); 
         return *this;
     }

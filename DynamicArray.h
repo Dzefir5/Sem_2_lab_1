@@ -1,6 +1,6 @@
 #pragma once
 #include "my_swap.h"
-#include "shared_ptr.h"
+#include "unique_ptr.h"
 #include <stdexcept>
 
 
@@ -9,7 +9,7 @@ class DynamicArray{
 
 private:
     int size;
-    shared_ptr<T> elements;
+    unique_ptr<T[]> elements;
     void swap(DynamicArray<T>& toSwap){
         my_swap(size,toSwap.size);
         my_swap(elements,toSwap.elements);
@@ -21,16 +21,17 @@ public:
         if(size<0) 
             throw std::invalid_argument("invalid argument in constructor");
         if(size>0) 
-            elements=shared_ptr<T>(new T[size]);
+            elements=unique_ptr<T[]>(new T[size]);
     }
-    DynamicArray( T* items, int count):DynamicArray<T>(count){
+
+    DynamicArray( const unique_ptr<T[]>& items, int count):DynamicArray<T>(count){
         if(items==nullptr) 
             throw std::invalid_argument("invalid argument in constructor");
         for(int i=0;i<count;i++){
             elements[i]=items[i];
         }
     }
-    DynamicArray(const shared_ptr<T>& ptr , int count):DynamicArray<T>(count){
+    DynamicArray(const T* ptr , int count):DynamicArray<T>(count){
         if(ptr==nullptr) 
             throw std::invalid_argument("invalid argument in constructor");
         for(int i=0;i<count;i++){
@@ -69,7 +70,7 @@ public:
             elements.reset();
             return;
         }
-        auto buf = shared_ptr<T>( new T[newSize] );
+        auto buf = unique_ptr<T[]>( new T[newSize] );
         if(elements!=nullptr){
             for(int i=0;i<std::min(size,newSize);i++){
                 buf[i+offset]=elements[i];
@@ -86,7 +87,7 @@ public:
                 elements.reset();
             return;
         }
-        auto buf = shared_ptr<T>( new T[newSize] );
+        auto buf = unique_ptr<T[]>( new T[newSize] );
         if(elements!=nullptr){
             for(int i=0;i<std::min(size,newSize);i++){
                 buf[i]=elements[i];
@@ -121,7 +122,7 @@ public:
     }
     DynamicArray<T>& operator=( DynamicArray<T> array){ ///COPY AND SWAP IDIOM
        swap(array);
-       return *this;-
+       return *this;
     }
     
     //Destructor

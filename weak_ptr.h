@@ -9,7 +9,7 @@ class weak_ptr{
 using U = remove_extent_t<T>;
 private:
     U* ptr;
-    Deleter my_delete =Deleter() ;
+    Deleter my_delete = Deleter() ;
     typename shared_ptr<T, Deleter>::ControlBlock* counter;
 public:
     void swap(weak_ptr<T, Deleter>& w_ptr){
