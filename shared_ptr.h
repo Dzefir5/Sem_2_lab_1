@@ -85,7 +85,7 @@ public:
     U* get() const {
         return ptr;
     }
-    template<typename K = T, typename = enable_if_t<typename is_array<K>::value > >
+    template<typename K = T, typename = enable_if_t<is_array_t<K>> >
     U& operator[](int index) const {
         return ptr[index];
     }
@@ -132,13 +132,13 @@ shared_ptr<T[],Deleter> make_shared(size_t size , Args&& ... args){
     for(int i =0 ; i<size;i++){
         ptr[i]=T(args...);
     }
-    return shared_ptr<T,Deleter>(ptr);
+    return shared_ptr<T[],Deleter>(ptr);
 }
 
 template<typename T,class Deleter =  My_Universal_Deleter<T>>
 shared_ptr<T[],Deleter> make_shared(size_t size){
     T* ptr  = new T[size];
-    return shared_ptr<T,Deleter>(ptr);
+    return shared_ptr<T[],Deleter>(ptr);
 }
 
 template<typename T,class Deleter =  My_Universal_Deleter<T>>

@@ -11,11 +11,11 @@ using U = remove_extent_t<T>;
 private:
     U* ptr;
     Deleter my_delete = Deleter() ;
-public:
-    //inline
     void swap(unique_ptr<T,Deleter>& un_ptr){
         my_swap(ptr,un_ptr.ptr); 
     }
+public:
+    //inline
     unique_ptr():ptr(nullptr){};
     explicit unique_ptr(std::nullptr_t):unique_ptr(){};
     explicit unique_ptr(U* in_ptr):ptr(my_move(in_ptr)){};
@@ -51,7 +51,7 @@ public:
     U* operator->() const {
         return ptr;
     }
-    template<typename K = T, typename = enable_if_t<typename is_array<K>::value > >
+    template<typename K = T, typename = enable_if_t<is_array_t<K>> >
     U& operator[](int index) const {
         return ptr[index];
     }
@@ -66,7 +66,7 @@ public:
         swap(temp_ptr); 
         return *this;
     }
-    virtual ~unique_ptr(){
+    ~unique_ptr(){
         my_delete(ptr);
     }
 };
