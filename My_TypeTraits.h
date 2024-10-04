@@ -38,6 +38,10 @@ struct is_array<T[N]>
     using value = true_type;
 };
 
+template<typename T>
+using is_array_t=  typename  is_array<T>::value;
+
+
 template<class B>
 struct enable_if{};
 
