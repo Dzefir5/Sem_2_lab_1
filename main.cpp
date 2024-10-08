@@ -35,4 +35,5 @@ int main(){
     Test_DynamicArray_CompareOperator();
     test_shared_ptr_main();
     test_unique_ptr_main();
+    std::cout<<"Success"<<std::endl;
 }
