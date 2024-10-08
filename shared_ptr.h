@@ -23,8 +23,6 @@ using U = remove_extent_t<T>;
     };
     U* ptr; 
     ControlBlock* counter;
-    Deleter my_delete = Deleter() ;
-
     friend class weak_ptr<T,Deleter>;
 
     void swap(shared_ptr<T,Deleter>& sh_ptr){
@@ -130,6 +128,7 @@ public:
             return;
         --(counter->ref_count);
         if( !counter->ref_count ){
+            Deleter my_delete = Deleter();
             my_delete(ptr);
             if( !counter->weak_count ) delete counter ;
         }

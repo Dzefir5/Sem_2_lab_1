@@ -10,7 +10,6 @@ class unique_ptr{
 using U = remove_extent_t<T>;
 private:
     U* ptr;
-    Deleter my_delete = Deleter() ;
     void swap(unique_ptr<T,Deleter>& un_ptr){
         my_swap(ptr,un_ptr.ptr); 
     }
@@ -81,6 +80,7 @@ public:
         return *this;
     }
     ~unique_ptr(){
+        Deleter my_delete = Deleter();
         my_delete(ptr);
     }
 };
