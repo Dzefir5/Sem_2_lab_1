@@ -76,17 +76,31 @@ public:
         auto buf = shared_ptr<T,Deleter>();
         swap(buf);
     }
-    U& operator*() const {
+    U& operator*() {
         return *get();
     }
-    U* operator->() const {
+    U* operator->() {
         return get();
     }
-    U* get() const {
+    U* get() {
         return ptr;
     }
+    const U& operator*() const {
+        return *get();
+    }
+    const U* operator->() const {
+        return get();
+    }
+    const U* get() const {
+        return ptr;
+    }
+
     template<typename K = T, typename = enable_if_t<is_array_t<K>> >
-    U& operator[](int index) const {
+    U& operator[](int index) {
+        return ptr[index];
+    }
+    template<typename K = T, typename = enable_if_t<is_array_t<K>> >
+    const U& operator[](int index) const {
         return ptr[index];
     }
 

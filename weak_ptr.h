@@ -11,11 +11,12 @@ private:
     U* ptr;
     Deleter my_delete = Deleter() ;
     typename shared_ptr<T, Deleter>::ControlBlock* counter;
-public:
-    void swap(weak_ptr<T, Deleter>& w_ptr){
+        void swap(weak_ptr<T, Deleter>& w_ptr){
         my_swap(ptr,w_ptr.ptr);  
         my_swap(counter,w_ptr.counter);
     }
+public:
+
     weak_ptr():ptr(nullptr),counter(nullptr){}
     weak_ptr(std::nullptr_t):weak_ptr(){}
     weak_ptr(const shared_ptr<T, Deleter>& sh_ptr):ptr(sh_ptr.ptr),counter(sh_ptr.counter){
@@ -29,17 +30,17 @@ public:
         w_ptr.counter = nullptr;
     }
 
-    bool is_expired(){
+    bool is_expired() const {
         if(!counter) return true;
         return counter->ref_count == 0;
     }
     //переименовать get_usage_count
     
-    size_t get_usage_count(){
+    size_t get_usage_count() const {
         if(!counter) return 0 ;
         return counter->weak_count;
     }
-    shared_ptr<T, Deleter> lock(){
+    shared_ptr<T, Deleter> lock() const {
         return shared_ptr<T, Deleter>(*this);
     }
 

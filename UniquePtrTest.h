@@ -11,15 +11,6 @@ void test_unptr_constructor(){
     auto ptr1 = unique_ptr<int>(new int(10));
     assert(*ptr1 == 10);
 }
-/*
-void test_unptr_copy_constructor(){
-    //Copy constructor
-    auto ptr1 = unique_ptr<int>(new int(10));
-    auto ptr3 = ptr1;
-    assert(*ptr3 == 10);
-    assert(ptr1.get()!=ptr3.get());
-}
-*/
 void test_unptr_move_constructor(){
     //Move constructor
     auto ptr3 = unique_ptr<int>(new int(10));

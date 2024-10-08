@@ -42,17 +42,31 @@ public:
         ptr = nullptr;
         return buf;
     }
-    U* get() const {
+    U& operator*() {
+        return *get();
+    }
+    U* operator->() {
+        return get();
+    }
+    U* get() {
         return ptr;
     }
-    U& operator*() const {
-        return *ptr;
+    const U& operator*() const {
+        return *get();
     }
-    U* operator->() const {
+    const U* operator->() const {
+        return get();
+    }
+    const U* get() const {
         return ptr;
+    }
+
+    template<typename K = T, typename = enable_if_t<is_array_t<K>> >
+    U& operator[](int index) {
+        return ptr[index];
     }
     template<typename K = T, typename = enable_if_t<is_array_t<K>> >
-    U& operator[](int index) const {
+    const U& operator[](int index) const {
         return ptr[index];
     }
     unique_ptr& operator=(const unique_ptr<T,Deleter>& un_ptr)=delete;
