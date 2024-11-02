@@ -1,4 +1,3 @@
-//#include <iostream>
 #include "shared_ptr.h"
 #include "DynamicArray.h"
 #include "DynamicArrayTest.h"
@@ -7,7 +6,7 @@
 #include <iostream>
 //clang++ main.cpp  -Wall -Wextra -o main.exe
 int main(){
-    /*
+    
     int* ptr = new int[10];
     {
         for(int i =0 ; i<10 ; i++){
@@ -19,13 +18,24 @@ int main(){
             std::cout<<ptr1[i]<<std::endl;
         }
     }
-    auto ptr2 = make_shared<int>(10);
+    //auto ptr2 = make_shared<int>(10);
     std::cout<<ptr[0]<<std::endl;
-    auto ptr2 = make_shared<int>(10);
+    auto ptr2 = make_shared<int[10]>();
+    for(int i =0 ; i<10 ; i++){
+        ptr2[i]=i;
+    }
+    for(int i =0 ; i<10 ; i++){
+        std::cout<<ptr2[i]<<std::endl;
+    }
+    //auto ptr3 = make_unique<int>(10);
+    //auto ptr4 = ptr3.getCopy();
+    //*ptr3 = 12;
+    //std::cout<<*ptr3<<std::endl;
+    //std::cout<<*ptr4<<std::endl;
     std::cout<<sizeof(shared_ptr<double>)<<std::endl;
     std::cout<<sizeof(unique_ptr<double>)<<std::endl;
     std::cout<<sizeof(weak_ptr<double>)<<std::endl;
-    */
+    
     
 
     test_move();

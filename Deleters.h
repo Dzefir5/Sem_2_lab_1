@@ -13,6 +13,13 @@ struct My_Universal_Deleter<T[]>{
         delete[] ptr;
     }
 };
+template<typename T,size_t N>
+struct My_Universal_Deleter<T[N]>{
+    void operator()(T* ptr){
+        delete[] ptr;
+    }
+};
+
 
 /* //для тестирования
 template<>

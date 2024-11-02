@@ -10,8 +10,6 @@
 template<typename T,class Deleter>
 class weak_ptr;
 
-
-//реализовать Deleter или специализаицию для T[]
 template<typename T,class Deleter =  My_Universal_Deleter<T> >
 class shared_ptr{
 private:
@@ -24,7 +22,6 @@ using U = remove_extent_t<T>;
     U* ptr; 
     ControlBlock* counter;
     friend class weak_ptr<T,Deleter>;
-
     void swap(shared_ptr<T,Deleter>& sh_ptr){
         my_swap(ptr,sh_ptr.ptr);  
         my_swap(counter,sh_ptr.counter);
@@ -147,11 +144,18 @@ shared_ptr<T[],Deleter> make_shared(size_t size , Args&& ... args){
     }
     return shared_ptr<T[],Deleter>(ptr);
 }
-
-template<typename T,class Deleter =  My_Universal_Deleter<T>>
-shared_ptr<T[],Deleter> make_shared(size_t size){
-    T* ptr  = new T[size];
-    return shared_ptr<T[],Deleter>(ptr);
+template<typename T,size_t N,class Deleter =  My_Universal_Deleter<T>,typename... Args>
+shared_ptr<T[N],Deleter> make_shared(Args&& ... args){
+    T* ptr  = new T[N];
+    for(int i =0 ; i<N;i++){
+        ptr[i]=T(args...);
+    }
+    return shared_ptr<T[N],Deleter>(ptr);
+}
+template<typename T,size_t N,class Deleter =  My_Universal_Deleter<T>>
+shared_ptr<T[N],Deleter> make_shared(){
+    T* ptr  = new T[N];
+    return shared_ptr<T[N],Deleter>(ptr);
 }
 
 template<typename T,class Deleter =  My_Universal_Deleter<T>>

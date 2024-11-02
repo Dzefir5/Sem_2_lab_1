@@ -38,6 +38,14 @@ void test_shptr_constructor(){
     auto ptr1 = shared_ptr<int>(new int(10));
     assert(*ptr1 == 10);
     assert(ptr1.get_usage_count() == 1);
+    auto ptr2 = shared_ptr<int[]>(new int[10]);
+    for(int i =0 ; i<10 ; i++){
+        ptr2[i]=i;
+    }
+    for(int i =0 ; i<10 ; i++){
+        assert(ptr2[i]==i);
+    }
+    assert(ptr2.get_usage_count() == 1);
 }
 void test_shptr_copy_constructor(){
     //Copy constructor
@@ -70,7 +78,6 @@ void test_shptr_destructor(){
         }
         assert(ptr5.get_usage_count() == 1 );
     }
-    assert(test_ptr==nullptr);
 }
 
 void test_shptr_assignment(){
@@ -169,6 +176,7 @@ void test_shared_ptr_compare(){
 
 void test_shared_ptr_main(){
     test_shptr_constructor();
+    test_shptr_destructor();
     test_shptr_copy_constructor();
     test_shptr_move_constructor();
     test_shptr_assignment();

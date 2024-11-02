@@ -10,7 +10,7 @@ using U = remove_extent_t<T>;
 private:
     U* ptr;
     typename shared_ptr<T, Deleter>::ControlBlock* counter;
-        void swap(weak_ptr<T, Deleter>& w_ptr){
+    void swap(weak_ptr<T, Deleter>& w_ptr){
         my_swap(ptr,w_ptr.ptr);  
         my_swap(counter,w_ptr.counter);
     }
@@ -33,7 +33,6 @@ public:
         if(!counter) return true;
         return counter->ref_count == 0;
     }
-    //переименовать get_usage_count
     
     size_t get_usage_count() const {
         if(!counter) return 0 ;

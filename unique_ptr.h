@@ -4,8 +4,9 @@
 #include <cstddef>
 #include "My_TypeTraits.h"
 
+//unique_ptr<int/int[],My_Deleter1,My_Deleter2, >>
 
-template <typename T,class Deleter =  My_Universal_Deleter<T>>
+template < typename T,class Deleter =  My_Universal_Deleter<T> >
 class unique_ptr{
 using U = remove_extent_t<T>;
 private:
@@ -14,7 +15,6 @@ private:
         my_swap(ptr,un_ptr.ptr); 
     }
 public:
-    //inline
     unique_ptr():ptr(nullptr){};
     explicit unique_ptr(std::nullptr_t):unique_ptr(){};
     explicit unique_ptr(U* in_ptr):ptr(my_move(in_ptr)){};
@@ -27,7 +27,7 @@ public:
     bool is_free() const {
         return ptr == nullptr;
     }
-    void reset(U* new_ptr){ //убрать
+    void reset(U* new_ptr){ 
         if(ptr==new_ptr) return ;
         auto buf = unique_ptr<T,Deleter>(new_ptr);
         swap(buf);
@@ -36,6 +36,11 @@ public:
         auto buf =  unique_ptr<T,Deleter>();
         swap(buf);
     }
+    /*
+    unique_ptr<T,Deleter> getCopy(){
+        return make_unique<T,Deleter>(*(*this));
+    }
+    */
     U* release(){
         U* buf = ptr;
         ptr = nullptr;
@@ -59,7 +64,6 @@ public:
     const U* get() const {
         return ptr;
     }
-
     template<typename K = T, typename = enable_if_t<is_array_t<K>> >
     U& operator[](int index) {
         return ptr[index];
@@ -68,6 +72,7 @@ public:
     const U& operator[](int index) const {
         return ptr[index];
     }
+
     unique_ptr& operator=(const unique_ptr<T,Deleter>& un_ptr)=delete;
     unique_ptr& operator=(std::nullptr_t){
         unique_ptr<T,Deleter> temp_ptr;
@@ -104,6 +109,20 @@ unique_ptr<T[],Deleter>make_unique(size_t size , Args&& ... args){
 template<typename T,class Deleter =  My_Universal_Deleter<T>>
 unique_ptr<T[],Deleter> make_unique(size_t size){
     T* ptr = new T[size];
+    return unique_ptr<T,Deleter>(ptr);
+}
+template<typename T,size_t N,class Deleter =  My_Universal_Deleter<T>,typename... Args>
+unique_ptr<T[N],Deleter>make_unique(Args&& ... args){
+    T* ptr  = new T[N];
+    for(int i =0 ; i<N;i++){
+        ptr[i]=T(args...);
+    }
+    return unique_ptr<T,Deleter>(ptr);
+}
+
+template<typename T,size_t N,class Deleter =  My_Universal_Deleter<T>>
+unique_ptr<T[N],Deleter> make_unique(){
+    T* ptr = new T[N];
     return unique_ptr<T,Deleter>(ptr);
 }
 
